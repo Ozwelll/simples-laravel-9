@@ -17,18 +17,13 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        /*Não consegui refatorar*/
-        $search = $request->search;
-        $users = $this->model->where(function ($query) use ($search) {
-        if ($search) {
-            $query->where('email', $search);
-            $query->orWhere('name', 'LIKE', "%{$search}%");
-        }
-
-    })->get();
+        $users = $this->model
+            ->getUsers(
+                search: $request->search ?? ''
+            );
 
         return view('users.index', compact('users'));
-
+        
     }
 
     public function show($id)
